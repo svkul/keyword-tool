@@ -7,12 +7,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 
+import { StatusBar } from "../status-bar/StatusBar";
+
 export const TextBlock = () => {
   return (
     <div className="flex-1 flex flex-col gap-4 p-4">
       <div className="flex items-center gap-2">
         <h1>Keyword Tool</h1>
-
 
         <Tooltip>
           <TooltipTrigger asChild>
@@ -41,7 +42,13 @@ export const TextBlock = () => {
         </Tooltip>
       </div>
 
-      <Textarea className="w-full flex-1" placeholder="Enter keywords into the box - 1 per line." />
+      <div className="flex flex-1 gap-2">
+        <Textarea name="keywords" className="flex-1" placeholder="Enter keywords into the box - 1 per line." />
+
+        <Textarea name="result" className="flex-1" placeholder="Enter keywords into the box - 1 per line." disabled />
+      </div>
+
+      <StatusBar />
     </div>
   )
 }
