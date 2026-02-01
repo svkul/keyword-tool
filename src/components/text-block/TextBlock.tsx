@@ -9,7 +9,14 @@ import {
 
 import { StatusBar } from "../status-bar/StatusBar";
 
-export const TextBlock = () => {
+type TextBlockProps = {
+  originalText: string;
+  resultText: string;
+  setText: (text: string) => void;
+  lastOperationTime?: number;
+};
+
+export const TextBlock = ({ originalText, resultText, setText, lastOperationTime }: TextBlockProps) => {
   return (
     <div className="flex-1 flex flex-col gap-4 p-4">
       <div className="flex items-center gap-2">
@@ -43,12 +50,24 @@ export const TextBlock = () => {
       </div>
 
       <div className="flex flex-1 gap-2">
-        <Textarea name="keywords" className="flex-1" placeholder="Enter keywords into the box - 1 per line." />
+        <Textarea
+          name="keywords"
+          className="flex-1"
+          placeholder="Enter keywords into the box - 1 per line."
+          value={originalText}
+          onChange={e => setText(e.target.value)}
+        />
 
-        <Textarea name="result" className="flex-1" placeholder="Enter keywords into the box - 1 per line." disabled />
+        <Textarea
+          name="result"
+          className="flex-1"
+          placeholder="Result will appear here..."
+          disabled
+          value={resultText}
+        />
       </div>
 
-      <StatusBar />
+      <StatusBar originalText={originalText} resultText={resultText} lastOperationTime={lastOperationTime} />
     </div>
   )
 }
