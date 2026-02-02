@@ -1,12 +1,12 @@
 import { useState, useCallback } from "react";
-import { useTextStore, type Transform } from "./store/useTextStore";
+import { useTextStore, type Op } from "./store/useTextStore";
 
 import { TextBlock } from "./components/text-block/TextBlock";
 import { Sidebar } from "./components/sidebar/Sidebar";
 
 function App() {
   const applyTransform = useTextStore((s) => s.applyTransform);
-  const applyBatch = useTextStore((s) => s.applyBatch);
+  const applyBatchOps = useTextStore((s) => s.applyBatchOps);
   const setText = useTextStore((s) => s.setText);
 
   const [lastOperationTime, setLastOperationTime] = useState<number | undefined>();
@@ -46,18 +46,21 @@ function App() {
     setLastOperationTime(elapsed);
   }, [applyTransform]);
 
-  const handleApplyBatch = useCallback((fns: Transform[]) => {
-    const start = performance.now();
-    applyBatch(fns);
-    const elapsed = performance.now() - start;
-    setLastOperationTime(elapsed);
-  }, [applyBatch]);
+  const handleApplyBatchOps = useCallback(
+    async (ops: Op[]) => {
+      const start = performance.now();
+      await applyBatchOps(ops);
+      const elapsed = performance.now() - start;
+      setLastOperationTime(elapsed);
+    },
+    [applyBatchOps],
+  );
 
   return (
     <section className="flex flex-1">
       <Sidebar
         apply={handleApply}
-        applyBatch={handleApplyBatch}
+        applyBatchOps={handleApplyBatchOps}
         clear={clear}
         copyToClipboard={copyToClipboard}
         importFromFile={importFromFile}

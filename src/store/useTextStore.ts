@@ -1,6 +1,16 @@
-import { create } from 'zustand';
+import { create } from "zustand";
+import { runInWorker } from "@/lib/runInWorker";
+import {
+  shouldUseWorker,
+  processTextInline,
+  type Op,
+} from "@/utils/operations";
+
+export type { Op } from "@/utils/operations";
 
 const MAX_HISTORY = 10;
+
+let batchAbortController: AbortController | null = null;
 
 export type HistoryState = {
   past: string[];
@@ -11,15 +21,18 @@ export type HistoryState = {
 export type Transform = (text: string) => string;
 
 type TextStore = {
-  /** Original text (left field / keywords) – only changed by user typing or setText/clear/import. */
   original: string;
   history: HistoryState;
+
+  isProcessing: boolean;
 
   setOriginal: (text: string) => void;
   setText: (text: string) => void;
 
   applyTransform: (fn: (lines: string[]) => string[]) => void;
   applyBatch: (fns: Transform[]) => void;
+  applyBatchOps: (ops: Op[]) => Promise<void>;
+  cancelBatch: () => void;
 
   undo: () => void;
   redo: () => void;
@@ -35,8 +48,9 @@ const emptyHistory: HistoryState = {
 };
 
 export const useTextStore = create<TextStore>((set, get) => ({
-  original: '',
+  original: "",
   history: { ...emptyHistory },
+  isProcessing: false,
 
   setOriginal: (text) =>
     set({
@@ -92,6 +106,45 @@ export const useTextStore = create<TextStore>((set, get) => ({
         future: [],
       },
     }));
+  },
+
+  applyBatchOps: async (ops) => {
+    const { history } = get();
+    const text = history.present;
+
+    if (ops.length === 0) return;
+
+    set({ isProcessing: true });
+    batchAbortController = new AbortController();
+
+    try {
+      const result = shouldUseWorker(text, ops)
+        ? await runInWorker(text, ops, batchAbortController.signal)
+        : processTextInline(text, ops);
+
+      if (result === history.present) return;
+
+      set((s) => ({
+        history: {
+          past: [...s.history.past, s.history.present].slice(-MAX_HISTORY),
+          present: result,
+          future: [],
+        },
+      }));
+    } catch (err) {
+      if ((err as Error)?.name !== "AbortError") {
+        console.error("Batch failed:", err);
+      }
+    } finally {
+      batchAbortController = null;
+      set({ isProcessing: false });
+    }
+  },
+
+  cancelBatch: () => {
+    if (batchAbortController) {
+      batchAbortController.abort();
+    }
   },
 
   undo: () => {

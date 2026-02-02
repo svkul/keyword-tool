@@ -55,10 +55,10 @@ export const TextBlock = ({ lastOperationTime }: TextBlockProps) => {
         </Tooltip>
       </div>
 
-      <div className="flex flex-1 gap-2">
+      <div className="flex flex-1 min-h-0 gap-2">
         <Textarea
           name="keywords"
-          className="flex-1"
+          className="flex-1 min-h-0 overflow-auto [field-sizing:normal]"
           placeholder="Enter keywords into the box - 1 per line."
           value={original}
           onChange={(e) => setOriginal(e.target.value)}
@@ -66,7 +66,7 @@ export const TextBlock = ({ lastOperationTime }: TextBlockProps) => {
 
         <Textarea
           name="result"
-          className="flex-1"
+          className="flex-1 min-h-0 overflow-auto [field-sizing:normal]"
           placeholder="Result will appear here..."
           disabled
           value={present}
