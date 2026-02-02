@@ -17,6 +17,9 @@ export const wrapWithBrackets = (lines: string[]) =>
 export const addDash = (lines: string[]) =>
   lines.map(l => `-${l}`);
 
+export const removeDash = (lines: string[]) =>
+  lines.map(l => l.replace(/-/g, ''));
+
 export const addDashBrackets = (lines: string[]) =>
   lines.map(l => `-[${l}]`);
 

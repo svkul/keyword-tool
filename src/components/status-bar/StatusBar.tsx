@@ -1,18 +1,21 @@
+import { useTextStore } from "@/store/useTextStore";
+
 type StatusBarProps = {
-  originalText: string;
-  resultText: string;
   lastOperationTime?: number;
 };
 
-export const StatusBar = ({ originalText, resultText, lastOperationTime }: StatusBarProps) => {
-  const originalLines = originalText.split('\n');
-  const resultLines = resultText.split('\n');
+export const StatusBar = ({ lastOperationTime }: StatusBarProps) => {
+  const original = useTextStore((s) => s.original);
+  const present = useTextStore((s) => s.history.present);
+
+  const originalLines = original.split("\n");
+  const resultLines = present.split("\n");
 
   const originalTotal = originalLines.length;
-  const originalEmpty = originalLines.filter(line => line.trim() === '').length;
+  const originalEmpty = originalLines.filter((line) => line.trim() === "").length;
 
   const resultTotal = resultLines.length;
-  const resultEmpty = resultLines.filter(line => line.trim() === '').length;
+  const resultEmpty = resultLines.filter((line) => line.trim() === "").length;
 
   return (
     <div className="bg-sidebar p-4 flex gap-4 text-sm">
@@ -35,5 +38,5 @@ export const StatusBar = ({ originalText, resultText, lastOperationTime }: Statu
         </div>
       )}
     </div>
-  )
-}
+  );
+};

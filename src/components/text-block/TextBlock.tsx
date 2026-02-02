@@ -5,18 +5,20 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 
+import { useTextStore } from "@/store/useTextStore";
 import { StatusBar } from "../status-bar/StatusBar";
 
 type TextBlockProps = {
-  originalText: string;
-  resultText: string;
-  setText: (text: string) => void;
   lastOperationTime?: number;
 };
 
-export const TextBlock = ({ originalText, resultText, setText, lastOperationTime }: TextBlockProps) => {
+export const TextBlock = ({ lastOperationTime }: TextBlockProps) => {
+  const original = useTextStore((s) => s.original);
+  const present = useTextStore((s) => s.history.present);
+  const setOriginal = useTextStore((s) => s.setOriginal);
+
   return (
     <div className="flex-1 flex flex-col gap-4 p-4">
       <div className="flex items-center gap-2">
@@ -32,15 +34,19 @@ export const TextBlock = ({ originalText, resultText, setText, lastOperationTime
               <li>
                 <span>Enter keywords into the box - 1 per line.</span>
               </li>
+
               <li>
                 <span>Check one or more of the 'Auto' options (optional).</span>
               </li>
+
               <li>
                 <span>Click a button to edit the keywords.</span>
               </li>
+
               <li>
                 <span>Hover your mouse cursor over a button for helpful hints.</span>
               </li>
+
               <li>
                 <span>Click on the AdWords and Find/Replace tabs for more functions.</span>
               </li>
@@ -54,8 +60,8 @@ export const TextBlock = ({ originalText, resultText, setText, lastOperationTime
           name="keywords"
           className="flex-1"
           placeholder="Enter keywords into the box - 1 per line."
-          value={originalText}
-          onChange={e => setText(e.target.value)}
+          value={original}
+          onChange={(e) => setOriginal(e.target.value)}
         />
 
         <Textarea
@@ -63,11 +69,11 @@ export const TextBlock = ({ originalText, resultText, setText, lastOperationTime
           className="flex-1"
           placeholder="Result will appear here..."
           disabled
-          value={resultText}
+          value={present}
         />
       </div>
 
-      <StatusBar originalText={originalText} resultText={resultText} lastOperationTime={lastOperationTime} />
+      <StatusBar lastOperationTime={lastOperationTime} />
     </div>
-  )
-}
+  );
+};

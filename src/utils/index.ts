@@ -21,6 +21,7 @@ export {
   wrapWithQuotes,
   wrapWithBrackets,
   addDash,
+  removeDash,
   addDashBrackets,
   addDashQuotes,
   removeSpecialChars,
@@ -36,3 +37,9 @@ export {
   sortZA,
   uniqueLines,
 } from './sort';
+
+/** Converts a line-based transform to a text-based transform for use with applyBatch. */
+export const toTextTransform =
+  (fn: (lines: string[]) => string[]) =>
+  (text: string): string =>
+    fn(text.split('\n')).join('\n');

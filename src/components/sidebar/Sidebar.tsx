@@ -9,6 +9,7 @@ import {
   wrapWithQuotes,
   wrapWithBrackets,
   addDash,
+  removeDash,
   addDashBrackets,
   addDashQuotes,
   trimSpaces,
@@ -21,13 +22,16 @@ import {
   sortZA,
   uniqueLines,
   findReplace,
+  toTextTransform,
 } from "@/utils";
 
+import { useTextStore } from "@/store/useTextStore";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 
 type SidebarProps = {
   apply: (fn: (lines: string[]) => string[]) => void;
+  applyBatch: (fns: ((text: string) => string)[]) => void;
   clear: () => void;
   copyToClipboard: () => Promise<boolean>;
   importFromFile: (content: string) => void;
@@ -36,14 +40,20 @@ type SidebarProps = {
 
 export const Sidebar = ({
   apply,
+  applyBatch,
   clear,
   copyToClipboard,
   importFromFile,
-  exportToFile
+  exportToFile,
 }: SidebarProps) => {
-  const [findText, setFindText] = useState('');
-  const [replaceText, setReplaceText] = useState('');
+  const [findText, setFindText] = useState("");
+  const [replaceText, setReplaceText] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const undo = useTextStore((s) => s.undo);
+  const redo = useTextStore((s) => s.redo);
+  const canUndo = useTextStore((s) => s.history.past.length > 0);
+  const canRedo = useTextStore((s) => s.history.future.length > 0);
 
   const handleImport = () => {
     fileInputRef.current?.click();
@@ -105,6 +115,7 @@ export const Sidebar = ({
           <Button onClick={() => apply(wrapWithQuotes)}>Додати лапки навколо рядка</Button>
           <Button onClick={() => apply(wrapWithBrackets)}>Додати квадратні дужки навколо рядка</Button>
           <Button onClick={() => apply(addDash)}>Додати - на початок рядка</Button>
+          <Button onClick={() => apply(removeDash)}>Видалити - з рядка</Button>
           <Button onClick={() => apply(addDashBrackets)}>-[...] на початку (тире + квадратні дужки)</Button>
           <Button onClick={() => apply(addDashQuotes)}>-"..." на початку (тире + лапки)</Button>
 
@@ -148,11 +159,45 @@ export const Sidebar = ({
       </section>
 
       <section className="flex flex-col gap-2 mt-4">
+        <h2>Batch</h2>
+
+        <div className="flex gap-2 flex-wrap">
+          <Button
+            onClick={() =>
+              applyBatch([
+                toTextTransform(trimSpaces),
+                toTextTransform(removeSpecialChars),
+                toTextTransform(uniqueLines),
+              ])
+            }
+          >
+            Trim + спецсимволи + унікальні
+          </Button>
+          <Button
+            onClick={() =>
+              applyBatch([
+                toTextTransform(toLowerCase),
+                toTextTransform(trimSpaces),
+                toTextTransform(uniqueLines),
+              ])
+            }
+          >
+            Малі літери + trim + унікальні
+          </Button>
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-2 mt-4">
         <h2>Історія</h2>
 
         <div className="flex gap-2 flex-wrap">
-          <Button disabled>Відміна</Button>
-          <Button disabled>Повтор</Button>
+          <Button onClick={undo} disabled={!canUndo}>
+            Відміна
+          </Button>
+
+          <Button onClick={redo} disabled={!canRedo}>
+            Повтор
+          </Button>
         </div>
       </section>
     </div>

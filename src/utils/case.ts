@@ -10,6 +10,7 @@ export const capitalizeEachWord = (lines: string[]) =>
   );
 
 export const capitalizeFirstWord = (lines: string[]) =>
-  lines.map(l =>
-    l.replace(/^\s*\p{L}/u, c => c.toUpperCase())
-  );
+  lines.map(l => {
+    const lowercased = l.toLowerCase();
+    return lowercased.replace(/^\s*\p{L}/u, char => char.toUpperCase());
+  });
