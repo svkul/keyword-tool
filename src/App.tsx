@@ -61,13 +61,9 @@ function App() {
       <Sidebar
         apply={handleApply}
         applyBatchOps={handleApplyBatchOps}
-        clear={clear}
-        copyToClipboard={copyToClipboard}
-        importFromFile={importFromFile}
-        exportToFile={exportToFile}
       />
 
-      <TextBlock lastOperationTime={lastOperationTime} />
+      <TextBlock apply={handleApply} clear={clear} copyToClipboard={copyToClipboard} importFromFile={importFromFile} exportToFile={exportToFile} lastOperationTime={lastOperationTime} />
     </section>
   );
 }
