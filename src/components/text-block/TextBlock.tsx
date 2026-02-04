@@ -63,7 +63,7 @@ export const TextBlock = ({ apply, clear, copyToClipboard, exportToFile, importF
     <div className="flex-1 flex flex-col gap-4 p-4">
       <div className="flex align-center justify-between">
         <div className="flex items-center gap-2">
-          <h1>Keyword Tool</h1>
+          <h1>Інструмент ключових слів</h1>
 
           <Tooltip>
             <TooltipTrigger asChild>
@@ -73,23 +73,23 @@ export const TextBlock = ({ apply, clear, copyToClipboard, exportToFile, importF
             <TooltipContent className="max-w-xs">
               <ol className="list-decimal list-inside">
                 <li>
-                  <span>Enter keywords into the box - 1 per line.</span>
+                  <span>Введіть ключові слова в поле — по одному на рядок.</span>
                 </li>
 
                 <li>
-                  <span>Check one or more of the 'Auto' options (optional).</span>
+                  <span>За потреби увімкніть одну або кілька опцій «Авто».</span>
                 </li>
 
                 <li>
-                  <span>Click a button to edit the keywords.</span>
+                  <span>Натисніть кнопку, щоб відредагувати ключові слова.</span>
                 </li>
 
                 <li>
-                  <span>Hover your mouse cursor over a button for helpful hints.</span>
+                  <span>Наведіть курсор на кнопку, щоб побачити підказку.</span>
                 </li>
 
                 <li>
-                  <span>Click on the AdWords and Find/Replace tabs for more functions.</span>
+                  <span>Вкладки AdWords та Пошук/Заміна дають додаткові функції.</span>
                 </li>
               </ol>
             </TooltipContent>
@@ -162,7 +162,7 @@ export const TextBlock = ({ apply, clear, copyToClipboard, exportToFile, importF
           <Textarea
             name="keywords"
             className="flex-1 min-h-0 overflow-auto [field-sizing:normal]"
-            placeholder="Enter keywords into the box - 1 per line."
+            placeholder="Введіть ключові слова — по одному на рядок."
             value={original}
             onChange={(e) => setOriginal(e.target.value)}
           />
@@ -234,7 +234,7 @@ export const TextBlock = ({ apply, clear, copyToClipboard, exportToFile, importF
           <Textarea
             name="result"
             className="flex-1 min-h-0 overflow-auto [field-sizing:normal]"
-            placeholder="Result will appear here..."
+            placeholder="Тут з'явиться результат..."
             value={present}
           />
         </div>

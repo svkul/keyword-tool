@@ -21,20 +21,20 @@ export const StatusBar = ({ lastOperationTime }: StatusBarProps) => {
   return (
     <div className="bg-sidebar p-4 flex flex-wrap items-center gap-4 text-sm">
       <div className="flex gap-2">
-        <span className="font-semibold">Original:</span>
-        <span>Lines: {originalTotal}</span>
-        <span>Empty: {originalEmpty}</span>
+        <span className="font-semibold">Оригінал:</span>
+        <span>Рядків: {originalTotal}</span>
+        <span>Порожніх: {originalEmpty}</span>
       </div>
 
       <div className="flex gap-2">
-        <span className="font-semibold">Result:</span>
-        <span>Lines: {resultTotal}</span>
-        <span>Empty: {resultEmpty}</span>
+        <span className="font-semibold">Результат:</span>
+        <span>Рядків: {resultTotal}</span>
+        <span>Порожніх: {resultEmpty}</span>
       </div>
 
       {lastOperationTime !== undefined && !isProcessing && (
         <div className="flex gap-2">
-          <span className="font-semibold">Last operation:</span>
+          <span className="font-semibold">Остання операція:</span>
           <span>{lastOperationTime.toFixed(2)}ms</span>
         </div>
       )}
@@ -45,7 +45,7 @@ export const StatusBar = ({ lastOperationTime }: StatusBarProps) => {
             className="size-4 animate-spin rounded-full border-2 border-current border-t-transparent"
             aria-hidden
           />
-          <span className="font-semibold">Processing…</span>
+          <span className="font-semibold">Обробка…</span>
         </div>
       )}
     </div>

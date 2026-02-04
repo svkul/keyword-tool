@@ -148,7 +148,7 @@ export const Sidebar = ({
       </section>
 
       <section className="flex flex-col gap-2 mt-4">
-        <h2>Batch</h2>
+        <h2>Пакетна обробка</h2>
 
         <div className="flex flex-col gap-2">
           <Button className="w-full min-h-9 h-auto py-2 whitespace-normal"
@@ -161,7 +161,7 @@ export const Sidebar = ({
             }
             disabled={isProcessing}
           >
-            Trim + спецсимволи + унікальні
+            Обрізати пробіли + спецсимволи + унікальні
           </Button>
 
           <Button className="w-full min-h-9 h-auto py-2 whitespace-normal"
@@ -174,7 +174,7 @@ export const Sidebar = ({
             }
             disabled={isProcessing}
           >
-            Малі літери + trim + унікальні
+            Малі літери + обрізати пробіли + унікальні
           </Button>
 
           <Button className="w-full min-h-9 h-auto py-2 whitespace-normal"
@@ -188,7 +188,7 @@ export const Sidebar = ({
             }
             disabled={isProcessing}
           >
-            lowercase + trim + unique + sort (uk)
+            Малі літери + обрізати пробіли + унікальні + сортування (укр)
           </Button>
 
           {isProcessing && (
